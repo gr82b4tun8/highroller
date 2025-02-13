@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HIGH ROLLER CLUB Leaderboard</title>
+    <style>
+        body {
+            font-family: "Arial", sans-serif;
+            background-color: #0d1117;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        h1 {
+            margin-top: 20px;
+            color: #39ff14; /* MW2 Green */
+            text-shadow: 0px 0px 10px #39ff14;
+        }
+
+        .leaderboard {
+            margin: 20px auto;
+            width: 80%;
+            max-width: 1200px;
+            border-collapse: separate;
+            border-spacing: 0 20px; /* Increased spacing between rows */
+        }
+
+        .leaderboard thead {
+            background-color: #1c1f26;
+            text-transform: uppercase;
+            font-size: 14px;
+        }
+
+        .leaderboard th, .leaderboard td {
+            text-align: center;
+            border: 1px solid #282c34;
+        }
+
+        .leaderboard tbody tr {
+            background-color: #15181e;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, height 0.3s ease, width 0.3s ease;
+            cursor: pointer;
+        }
+
+        /* Removed animation for the first place */
+        .leaderboard tbody tr:first-child {
+            font-size: 30px;
+            height: 100px; /* Adjusted height to a more neutral value */
+            width: 80%; /* Adjusted width to match the others */
+        }
+
+        /* Adjust other ranks without animation */
+        .leaderboard tbody tr:nth-child(2) {
+            font-size: 25px;
+            height: 90px;
+            width: 75%;
+        }
+
+        .leaderboard tbody tr:nth-child(3) {
+            font-size: 20px;
+            height: 80px;
+            width: 70%;
+        }
+
+        .leaderboard tbody tr:nth-child(n+4) {
+            font-size: 16px;
+            height: 70px;
+            width: 60%;
+        }
+
+        /* Hover effect */
+        .leaderboard tbody tr:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px #39ff14;
+        }
+
+        /* Headers */
+        .leaderboard .rank {
+            font-weight: bold;
+            color: #39ff14;
+        }
+
+        .leaderboard .project-name {
+            text-align: left;
+            padding-left: 20px;
+        }
+
+        .leaderboard .solona-blown {
+            color: #ff4747; /* Red for Solona Blown */
+        }
+
+        .claim-spot {
+            margin: 20px auto;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #39ff14;
+            background: linear-gradient(90deg, #0d1117, #1c1f26);
+            border: 2px solid #39ff14;
+            border-radius: 5px;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px #39ff14;
+        }
+
+        footer {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <h1>HIGH ROLLER CLUB Leaderboard</h1>
+
+    <table class="leaderboard">
+        <thead>
+            <tr>
+                <th>Place</th>
+                <th>Project Name</th>
+                <th>Solona Blown</th>
+            </tr>
+        </thead>
+        <tbody id="leaderboard-body">
+            <!-- Leaderboard rows will be dynamically added here -->
+        </tbody>
+    </table>
+
+    <div class="claim-spot" onclick="claimSpot()">
+        CLAIM YOUR SPOT
+    </div>
+
+    <footer>
+        © 2025 HIGH ROLLER CLUB Leaderboard | Inspired by MW2 Design
+    </footer>
+
+    <script>
+        // Sample data for the leaderboard
+        const leaderboardData = [
+            { place: 1, projectName: "GhostOps", solonaBlown: 2000 },
+            { place: 2, projectName: "ShadowTeam", solonaBlown: 1800 },
+            { place: 3, projectName: "BlackMarket", solonaBlown: 1700 },
+            { place: 4, projectName: "CryptoKings", solonaBlown: 1500 },
+            { place: 5, projectName: "MoneyMakers", solonaBlown: 1400 },
+            { place: 6, projectName: "TechGiants", solonaBlown: 1300 },
+            { place: 7, projectName: "FinanceMoguls", solonaBlown: 1200 },
+            { place: 8, projectName: "Quantum", solonaBlown: 1100 },
+            { place: 9, projectName: "EliteSquad", solonaBlown: 1050 },
+            { place: 10, projectName: "ProjectX", solonaBlown: 1000 },
+            { place: 11, projectName: "PowerUp", solonaBlown: 950 },
+            { place: 12, projectName: "CodeWarriors", solonaBlown: 900 },
+            { place: 13, projectName: "StealthOps", solonaBlown: 875 },
+            { place: 14, projectName: "GameChangers", solonaBlown: 850 },
+            { place: 15, projectName: "DarkMatter", solonaBlown: 825 },
+            { place: 16, projectName: "RedZone", solonaBlown: 800 },
+            { place: 17, projectName: "SkyLabs", solonaBlown: 775 },
+            { place: 18, projectName: "IronClad", solonaBlown: 750 },
+            { place: 19, projectName: "DigitalStorm", solonaBlown: 725 },
+            { place: 20, projectName: "NexGen", solonaBlown: 700 },
+            // Add more items for up to 100
+        ];
+
+        // Populate leaderboard
+        const leaderboardBody = document.getElementById("leaderboard-body");
+
+        leaderboardData.forEach(player => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                <td class="rank">${player.place}</td>
+                <td class="project-name">${player.projectName}</td>
+                <td class="solona-blown">${player.solonaBlown}</td>
+            `;
+            leaderboardBody.appendChild(tr);
+        });
+
+        // Claim Spot Function
+        function claimSpot() {
+            alert("Feature coming soon! Stay tuned for updates.");
+        }
+    </script>
+</body>
+</html>
